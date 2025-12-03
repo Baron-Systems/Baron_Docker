@@ -31,7 +31,7 @@ services:
 
   mariadb:
     image: mariadb:10.6
-    container_name: erpnext-mariadb
+    container_name: mariadb
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -47,17 +47,17 @@ services:
 
   redis-cache:
     image: redis:alpine
-    container_name: erpnext-redis-cache
+    container_name: redis-cache
     restart: unless-stopped
 
   redis-queue:
     image: redis:alpine
-    container_name: erpnext-redis-queue
+    container_name: redis-queue
     restart: unless-stopped
 
   redis-socketio:
     image: redis:alpine
-    container_name: erpnext-redis-socketio
+    container_name: redis-socketio
     restart: unless-stopped
 
 volumes:
