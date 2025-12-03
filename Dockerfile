@@ -29,7 +29,7 @@ RUN bench init \
     && cd frappe-bench \
     && bench get-app --branch ${ERPNEXT_BRANCH} ${ERPNEXT_REPO} \
     && if [ -n "${BARONERP_REPO}" ]; then \
-         bench get-app --branch ${BARONERP_BRANCH} baronerp ${BARONERP_REPO}; \
+         bench get-app --branch ${BARONAPP_BRANCH} baronerp ${BARONAPP_REPO}; \
        fi \
     && echo "{}" > sites/common_site_config.json
 

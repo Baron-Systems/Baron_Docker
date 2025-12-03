@@ -6,8 +6,8 @@ services:
         FRAPPE_BRANCH: ${FRAPPE_BRANCH}
         ERPNEXT_REPO: ${ERPNEXT_REPO}
         ERPNEXT_BRANCH: ${ERPNEXT_BRANCH}
-        BARONAPP_REPO: ${BARONERP_REPO}
-        BARONAPP_BRANCH: ${BARONERP_BRANCH}
+        BARONAPP_REPO: ${BARONAPP_REPO}
+        BARONAPP_BRANCH: ${BARONAPP_BRANCH}
     container_name: erpnext-python
     working_dir: /workspace/frappe-bench
     command: >
