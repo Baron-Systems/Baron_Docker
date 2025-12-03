@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      args:
+        FRAPPE_REPO: ${FRAPPE_REPO}
+        FRAPPE_BRANCH: ${FRAPPE_BRANCH}
+        ERPNEXT_REPO: ${ERPNEXT_REPO}
+        ERPNEXT_BRANCH: ${ERPNEXT_BRANCH}
+        CUSTOM_APP_1_REPO: ${CUSTOM_APP_1_REPO}
+        CUSTOM_APP_1_BRANCH: ${CUSTOM_APP_1_BRANCH}
+    container_name: baronerp-backend
+    working_dir: /workspace
+    command: >
+      bash -c "bench start"
+    ports:
+      - "80:8000"
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      # bench يستخدم هذه القيم ليتصل بقاعدة البيانات
+      # (سنربطها يدويًا عند إنشاء الـ site)
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - sites:/workspace/sites
+      - logs:/workspace/logs
+
+  mariadb:
+    image: mariadb:10.6
+    container_name: baronerp-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mariadb:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: baronerp-redis
+
+volumes:
+  sites:
+  logs:
+  mariadb:
