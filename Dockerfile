@@ -8,7 +8,15 @@ ARG ERPNEXT_BRANCH
 ARG CUSTOM_APP_1_REPO
 ARG CUSTOM_APP_1_BRANCH
 
-# سنستخدم /workspace كحاوية عامة، وننشئ bench داخلها في مجلد فرعي
+# نضمن أننا نعمل كمستخدم root لتثبيت الحزم
+USER root
+
+# ====== تثبيت redis-server (مطلوب لكي لا يفشل bench init عند فحص نسخة Redis) ======
+RUN apt-get update \
+    && apt-get install -y redis-server \
+    && rm -rf /var/lib/apt/lists/*
+
+# سنستخدم /workspace كجذر وننشئ bench داخله
 WORKDIR /workspace
 
 # ====== إنشاء bench جديد داخل /workspace/frappe-bench وتنزيل ERPNext ======
