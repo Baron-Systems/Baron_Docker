@@ -8,12 +8,11 @@ ARG ERPNEXT_BRANCH
 ARG CUSTOM_APP_1_REPO
 ARG CUSTOM_APP_1_BRANCH
 
-# مكان العمل داخل الكونتينر
+# مكان العمل داخل الكونتينر - في هذه الصورة /workspace هو bench جاهز
 WORKDIR /workspace
 
-# ====== إنشاء bench وتنزيل Frappe/ERPNext ======
-RUN bench init --frappe-branch ${FRAPPE_BRANCH} --skip-assets /workspace \
-    && cd /workspace \
+# ====== تنزيل ERPNext على الـ bench الموجود ======
+RUN cd /workspace \
     && bench get-app --branch ${ERPNEXT_BRANCH} ${ERPNEXT_REPO}
 
 # ====== تنزيل التطبيق المخصص (اختياري) ======
@@ -21,5 +20,4 @@ RUN if [ -n "${CUSTOM_APP_1_REPO}" ]; then \
       cd /workspace && bench get-app --branch ${CUSTOM_APP_1_BRANCH} ${CUSTOM_APP_1_REPO}; \
     fi
 
-# ====== فتح البورت 8000 (سنعمل reverse من 80 -> 8000 في docker-compose) ======
 EXPOSE 8000
