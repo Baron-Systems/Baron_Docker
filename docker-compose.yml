@@ -1,5 +1,5 @@
 services:
-  erpnext-python:
+  baron-erp:
     build:
       context: .
       args:
@@ -8,7 +8,8 @@ services:
         ERPNEXT_BRANCH: ${ERPNEXT_BRANCH}
         BARONAPP_REPO: ${BARONAPP_REPO}
         BARONAPP_BRANCH: ${BARONAPP_BRANCH}
-    container_name: erpnext-python
+    container_name: baron-erp
+    image: baron-app:v1  
     working_dir: /workspace/frappe-bench
     command: >
       bash -c "bench start"
