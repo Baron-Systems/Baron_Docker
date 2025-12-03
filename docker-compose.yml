@@ -1,34 +1,42 @@
 services:
-  backend:
+  erpnext-python:
     build:
       context: .
       args:
-        FRAPPE_REPO: ${FRAPPE_REPO}
         FRAPPE_BRANCH: ${FRAPPE_BRANCH}
         ERPNEXT_REPO: ${ERPNEXT_REPO}
         ERPNEXT_BRANCH: ${ERPNEXT_BRANCH}
-        CUSTOM_APP_1_REPO: ${CUSTOM_APP_1_REPO}
-        CUSTOM_APP_1_BRANCH: ${CUSTOM_APP_1_BRANCH}
-    container_name: baronerp-backend
+        BARONERP_REPO: ${BARONERP_REPO}
+        BARONERP_BRANCH: ${BARONERP_BRANCH}
+    container_name: erpnext-python
     working_dir: /workspace/frappe-bench
     command: >
       bash -c "bench start"
-    ports:
-      - "80:8000"
-    depends_on:
-      - mariadb
-      - redis
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    depends_on:
+      - mariadb
+      - redis-cache
+      - redis-queue
+      - redis-socketio
+    ports:
+      - "80:8000"
     volumes:
       - sites:/workspace/frappe-bench/sites
       - logs:/workspace/frappe-bench/logs
 
   mariadb:
     image: mariadb:10.6
-    container_name: baronerp-mariadb
+    container_name: erpnext-mariadb
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -36,9 +44,20 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
 
-  redis:
+  redis-cache:
     image: redis:alpine
-    container_name: baronerp-redis
+    container_name: erpnext-redis-cache
+    restart: unless-stopped
+
+  redis-queue:
+    image: redis:alpine
+    container_name: erpnext-redis-queue
+    restart: unless-stopped
+
+  redis-socketio:
+    image: redis:alpine
+    container_name: erpnext-redis-socketio
+    restart: unless-stopped
 
 volumes:
   sites:
