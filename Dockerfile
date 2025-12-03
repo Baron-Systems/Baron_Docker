@@ -1,4 +1,4 @@
-FROM frappe/bench:stable
+FROM frappe/bench:latest
 
 # ====== المتغيرات القادمة من docker-compose (.env) ======
 ARG FRAPPE_REPO
